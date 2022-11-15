@@ -1,34 +1,28 @@
-# General purpose JavaScript deobfuscator
+# Деобфускатор Javascript
 
-A powerful deobfuscator to remove common JavaScript obfuscation techniques.
-Open an issue if there is a feature you think should be implemented.
+Мощный деобфускатор для удаления обычных методов обфускации JavaScript.
 
+Установка: `npm install js-deobfuscator`
 
-Install via `npm install js-deobfuscator`
+# # Функции
+1) Распаковывает массивы, содержащие литералы (строки, числа и т.д.), и заменяет все ссылки на них.
+2) Удаляет простые функции прокси-сервера (вызовы другой функции), функции прокси-сервера массива и арифметические функции прокси-сервера (двоичные выражения).
+3) Упрощает арифметические выражения.
+4) Упрощает конкатенацию строк.
+5) Преобразует нечитаемые шестнадцатеричные идентификаторы.
+6) Преобразует вычисленные выражения в статические и улучшает код.
+7) Проводит оценку экспериментальной функции.
 
-## Features
+Часто запутанные сценарии используют не только массив строк, но и функции дешифратора строк, выполняющие более сложную логику.
 
--   Unpacks arrays containing literals (strings, numbers etc) and replaces all references to them
--   Removes simple proxy functions (calls to another function), array proxy functions and arithmetic proxy functions (binary expressions)
--   Simplifies arithmetic expressions
--   Simplifies string concatenation
--   Renames unreadable hexadecimal identifiers (e.g. \_0xca830a)
--   Converts computed to static member expressions and beautifies the code
--   _Experimental_ function evaluation
+Несколько важных моментов, касающихся оценки функций:
 
+1) Будьте внимательны при использовании оценки функций, это выполняет любые функции, которые вы указываете на вашей локальной машине, так что убедитесь, что эти функции не делают ничего вредоносного.
+2) Если функция не является объявлением функции (т.е. выражением функции или выражением функции со стрелками), то деобфускатор не сможет автоматически определить ее имя. Для этого используйте директиву «# execute [name = FUNC _ NAME]».
+3) Возможно,потребуется изменить функцию, чтобы убедиться, что она не зависит от внешних переменных (т.е. переместить объявление строкового массива внутри функции) и обработать любую дополнительную логику, такую как поворот строкового массива.
+4) Прежде чем использовать оценку функции, необходимо удалить все механизмы защиты от несанкционированного доступа, иначе это может привести к бесконечному циклу.
 
-
-Often obfuscated scripts don't just use an array of strings, instead they have string decoder functions that execute more complex logic, such as the example below.
-
-A few important points about function evaluation:
-
--   BE CAREFUL when using function evaluation, this executes whatever functions you specify on your local machine so make sure those functions are not doing anything malicious.
--   This feature is still somewhat experimental, it's probably easier to use via the CLI as it's easier to find errors than the online version.
--   If the function is not a function declaration (i.e. a function expression or an arrow function expression) then the deobfuscator will not be able to detect the name of it automatically. To provide it use "#execute[name=FUNC_NAME]" directive.
--   You may need to modify the function to ensure it relies on no external variables (i.e. move a string array declaration inside the function) and handle any extra logic like string array rotation first.
--   You must first remove any anti tampering mechanisms before using function evaluation, otherwise it may cause an infinite loop.
-
-## Config
+## Конфигурация
 
 ```typescript
 interface Config {
@@ -52,21 +46,20 @@ interface Config {
 }
 ```
 
-## To Run
-
-Either install the module locally via `npm install js-deobfuscator` and import as usual or install globally `npm install -g js-deobfuscator` and use the `js-deobfuscator` CLI:
+## Для запуска
+Либо установите модуль локально через «npm install js-deobfuscator» и импортируйте как обычно, либо установите глобально «npm install -g js-deobfuscator» и используйте интерфейс командной строки «js-deobfuscator».
 
 ```shell
 > js-deobfuscator -h
 Usage: run [options]
 
-Deobfuscate a javascript file
+## Деобфускация Javascript-файла
 
-Options:
-  -i, --input [input_file]    The input file to deobfuscate (default: "input/source.js")
-  -o, --output [output_file]  The deobfuscated output file (default: "output/output.js")
-  -f, --force                 Whether to overwrite the output file or not
-  -h, --help                  display help for command
+Команды:
+  -i, --input [input_file]    Входной файл для деобфускации (default: "input/source.js")
+  -o, --output [output_file]  Результат(выходной файл) деобфускации (default: "output/output.js")
+  -f, --force                 Если перезаписать выходной файл или нет
+  -h, --help                  Отобразить справку по команде
 
 >
 ```
